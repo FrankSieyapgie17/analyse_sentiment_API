@@ -23,4 +23,8 @@ public class AvisController {
         avis.setUtilisateur(utilisateur);
         this.avisService.creer(avis);
     }
+    @DeleteMapping(path = "delete/{id}")
+    public void delete(@PathVariable Integer id){
+        this.avisService.delete(id);
+    }
 }

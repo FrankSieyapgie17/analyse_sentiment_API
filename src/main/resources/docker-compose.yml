@@ -1,0 +1,59 @@
+version: "5"
+services:
+  adminer:
+    image: adminer:5.0.4-standalone
+    restart: always
+    ports:
+      - "8082:8080"
+
+  db:
+    image: mysql:8
+    restart: always
+    environment:
+      MYSQL_DATABASE: Security-db
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: root
+    ports:
+      - "3308:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql  # Persistence des données
+    networks:
+      - my-network
+  app:
+    build: .  # Suppose que votre Dockerfile est dans le même dossier
+    depends_on:
+      - mysql
+    environment:
+      DB_HOST: mysql  # Utilisez le nom du service comme hostname
+      DB_PORT: 3306
+      DB_NAME: Security-db
+      DB_USER: root
+      DB_PASSWORD: root
+    networks:
+      - my-network
+    ports:
+      - "8080:8080"  # Expose le port de l'application
+
+  smtp4dev:
+    image: rnwood/smtp4dev:v3
+    restart: always
+    ports:
+      # Change the number before : to the port the web interface should be accessible on
+      - '8090:80'
+      # Change the number before : to the port the SMTP server should be accessible on
+      - '90:25'
+
+
+    # (this is just an example, not intended to be a production configuration)
+
+volumes:
+  mysql_data:
+
+networks:
+  my-network:
+    driver: bridge
+
+
+
+
+

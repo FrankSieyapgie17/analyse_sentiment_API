@@ -18,9 +18,9 @@ public class Avis {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
-    private int id;
+    private Integer id;
     private String message;
     private String statut;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Utilisateur utilisateur;
 }
